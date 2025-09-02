@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Balloon animation */
+.balloon {
+  animation: floatUp linear infinite;
+  border: 2px solid rgba(255,255,255,0.55);
+  box-shadow: 0 10px 30px rgba(240, 50, 90, 0.15);
+}
+@keyframes floatUp {
+  0% { transform: translateY(0) }
+  100% { transform: translateY(-120vh) }
+}
