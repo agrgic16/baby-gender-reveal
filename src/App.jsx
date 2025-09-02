@@ -83,15 +83,6 @@ export default function GenderRevealApp() {
     setFlashes(0);
   };
 
-  useInterval(
-    () => {
-      flipRef.current = flipRef.current ^ 1;
-      setLabel(flipRef.current ? "GIRL" : "BOY");
-      setFlashes((c) => c + 1);
-    },
-    phase === "flashing" ? flashMs : null
-  );
-
   useEffect(() => {
     if (phase !== "flashing") return;
     const totalFlashes = Math.floor(randomBetween(16, 28));
@@ -104,13 +95,21 @@ export default function GenderRevealApp() {
     // Forcefully set GIRL at the end to avoid race conditions
     const ensureGirl = setTimeout(() => {
       setLabel("GIRL");
-    }, (totalFlashes * flashMs) + 50);
+    }, (totalFlashes * flashMs) + 100);
 
     return () => {
       clearTimeout(stopAt);
       clearTimeout(ensureGirl);
     };
   }, [phase, flashMs]);
+
+  useInterval(
+    () => {
+      setLabel((prev) => (prev === "BOY" ? "GIRL" : "BOY"));
+      setFlashes((c) => c + 1);
+    },
+    phase === "flashing" ? flashMs : null
+  );
 
   const reset = () => {
     setPhase("idle");
