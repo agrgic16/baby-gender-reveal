@@ -118,6 +118,7 @@ export default function GenderRevealApp() {
 
   const isRevealed = phase === "revealed";
 
+  // In render, always show GIRL when revealed
   return (
     <div
       className={[
@@ -148,6 +149,14 @@ export default function GenderRevealApp() {
                   aria-atomic="true"
                 >
                   {label}
+                </h1>
+              ) : isRevealed ? (
+                <h1
+                  className="text-6xl md:text-7xl font-extrabold tracking-tight text-pink-600"
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
+                  GIRL
                 </h1>
               ) : (
                 <AnimatePresence mode="wait">
