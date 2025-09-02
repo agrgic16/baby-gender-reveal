@@ -76,6 +76,13 @@ export default function GenderRevealApp() {
     }));
   }, [phase]);
 
+  const startReveal = () => {
+    flipRef.current = 0;
+    setPhase("flashing");
+    setLabel("GIRL"); // Ensure it starts with GIRL
+    setFlashes(0);
+  };
+
   useInterval(
     () => {
       flipRef.current = flipRef.current ^ 1;
@@ -90,18 +97,11 @@ export default function GenderRevealApp() {
     const totalFlashes = Math.floor(randomBetween(16, 28));
     const stopAt = setTimeout(() => {
       setPhase("revealed");
-      setLabel("GIRL");
+      setLabel("GIRL"); // Ensure it ends with GIRL
       setFlashes(0);
     }, totalFlashes * flashMs);
     return () => clearTimeout(stopAt);
   }, [phase, flashMs]);
-
-  const startReveal = () => {
-    flipRef.current = 0;
-    setPhase("flashing");
-    setLabel("BOY");
-    setFlashes(0);
-  };
 
   const reset = () => {
     setPhase("idle");
