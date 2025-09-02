@@ -83,18 +83,6 @@ export default function GenderRevealApp() {
     setFlashes(0);
   };
 
-  useEffect(() => {
-    if (phase !== "flashing") return;
-    const totalFlashes = Math.floor(randomBetween(16, 28));
-    const stopAt = setTimeout(() => {
-      setPhase("revealed");
-      setLabel("GIRL"); // Ensure it ends with GIRL
-      setFlashes(0);
-    }, totalFlashes * flashMs);
-
-    return () => clearTimeout(stopAt);
-  }, [phase, flashMs]);
-
   useInterval(
     () => {
       setLabel((prev) => (prev === "BOY" ? "GIRL" : "BOY")); // Alternate between BOY and GIRL
@@ -102,6 +90,25 @@ export default function GenderRevealApp() {
     },
     phase === "flashing" ? flashMs : null
   );
+
+  useEffect(() => {
+    if (phase !== "flashing") return;
+    const totalFlashes = Math.floor(randomBetween(16, 28));
+    const duration = totalFlashes * flashMs;
+    const stopAt = setTimeout(() => {
+      setPhase("revealed");
+      setLabel("GIRL"); // Always end on GIRL
+      setFlashes(0);
+    }, duration);
+    // Manually set to GIRL after interval completes
+    const forceGirl = setTimeout(() => {
+      setLabel("GIRL");
+    }, duration + 50);
+    return () => {
+      clearTimeout(stopAt);
+      clearTimeout(forceGirl);
+    };
+  }, [phase, flashMs]);
 
   const reset = () => {
     setPhase("idle");
