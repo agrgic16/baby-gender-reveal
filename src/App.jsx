@@ -92,20 +92,12 @@ export default function GenderRevealApp() {
       setFlashes(0);
     }, totalFlashes * flashMs);
 
-    // Forcefully set GIRL at the end to avoid race conditions
-    const ensureGirl = setTimeout(() => {
-      setLabel("GIRL");
-    }, (totalFlashes * flashMs) + 100);
-
-    return () => {
-      clearTimeout(stopAt);
-      clearTimeout(ensureGirl);
-    };
+    return () => clearTimeout(stopAt);
   }, [phase, flashMs]);
 
   useInterval(
     () => {
-      setLabel((prev) => (prev === "BOY" ? "GIRL" : "BOY"));
+      setLabel((prev) => (prev === "BOY" ? "GIRL" : "BOY")); // Alternate between BOY and GIRL
       setFlashes((c) => c + 1);
     },
     phase === "flashing" ? flashMs : null
