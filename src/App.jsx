@@ -100,7 +100,16 @@ export default function GenderRevealApp() {
       setLabel("GIRL"); // Ensure it ends with GIRL
       setFlashes(0);
     }, totalFlashes * flashMs);
-    return () => clearTimeout(stopAt);
+
+    // Forcefully set GIRL at the end to avoid race conditions
+    const ensureGirl = setTimeout(() => {
+      setLabel("GIRL");
+    }, (totalFlashes * flashMs) + 50);
+
+    return () => {
+      clearTimeout(stopAt);
+      clearTimeout(ensureGirl);
+    };
   }, [phase, flashMs]);
 
   const reset = () => {
